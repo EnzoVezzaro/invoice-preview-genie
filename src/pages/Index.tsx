@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Invoice } from '@/types/invoice';
-import InvoiceForm from '@/components/InvoiceForm';
-import InvoicePreview from '@/components/InvoicePreview';
+import { Invoice } from '@/types/invoice-extended';
+import EnhancedInvoiceForm from '@/components/EnhancedInvoiceForm';
+import EnhancedInvoicePreview from '@/components/EnhancedInvoicePreview';
 import SavedInvoices from '@/components/SavedInvoices';
 import { Button } from '@/components/ui/button';
 import { Download, FilePlus, Printer, Save } from 'lucide-react';
@@ -9,240 +9,166 @@ import { generateInvoicePDF } from '@/utils/pdfGenerator';
 import { toast } from '@/hooks/use-toast';
 import { v4 as uuidv4 } from 'uuid';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useLanguage } from '@/contexts/LanguageContext';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
+import { emptyInvoice } from '@/types/invoice-extended';
 
 const Index = () => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
+  const { t } = useLanguage();
   const isMobile = useIsMobile();
   const [savedInvoices, setSavedInvoices] = useState<Invoice[]>([]);
   const [invoice, setInvoice] = useState<Invoice>({
+    ...emptyInvoice,
     id: uuidv4(),
-    invoiceNumber: 'INV-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000),
-    dateIssued: new Date().toISOString().split('T')[0],
-    dateDue: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // +30 days
-    from: {
-      name: 'Your Business Name',
-      street: '123 Business Street',
-      city: 'San Francisco',
-      state: 'CA',
-      zipCode: '94107',
-      country: 'United States',
-      email: 'contact@yourbusiness.com',
-      phone: '(123) 456-7890'
-    },
-    to: {
-      name: 'Client Name',
-      street: '456 Client Avenue',
-      city: 'Los Angeles',
-      state: 'CA',
-      zipCode: '90001',
-      country: 'United States',
-      email: 'client@example.com',
-      phone: ''
-    },
-    items: [
-      {
-        id: uuidv4(),
-        description: 'Website Design',
-        quantity: 1,
-        unitPrice: 1200,
-        total: 1200
-      }
-    ],
-    notes: 'Thank you for your business!',
-    terms: 'Payment due within 30 days of receipt.',
-    taxRate: 10,
-    taxAmount: 120,
-    subtotal: 1200,
-    total: 1320,
-    currency: '$',
-    logo: ''
+    fromCustomFields: [],
+    toCustomFields: []
   });
 
-  // Load saved invoices from localStorage on component mount
   useEffect(() => {
-    const storedInvoices = localStorage.getItem('savedInvoices');
+    const storedInvoices = localStorage.getItem('invoices');
     if (storedInvoices) {
-      try {
-        const parsedInvoices = JSON.parse(storedInvoices);
-        setSavedInvoices(parsedInvoices);
-      } catch (error) {
-        console.error('Error parsing saved invoices:', error);
-        localStorage.removeItem('savedInvoices');
-      }
+      setSavedInvoices(JSON.parse(storedInvoices));
     }
   }, []);
 
-  const saveInvoice = () => {
-    // Make sure the invoice has an ID
-    const invoiceToSave = { ...invoice };
-    if (!invoiceToSave.id) {
-      invoiceToSave.id = uuidv4();
-    }
-    
-    // Check if the invoice already exists
-    const exists = savedInvoices.some(inv => inv.id === invoiceToSave.id);
-    
-    let updatedInvoices;
-    if (exists) {
-      // Update existing invoice
-      updatedInvoices = savedInvoices.map(inv => 
-        inv.id === invoiceToSave.id ? invoiceToSave : inv
-      );
-      toast({
-        title: "Success",
-        description: "Invoice updated",
-      });
-    } else {
-      // Add new invoice
-      updatedInvoices = [...savedInvoices, invoiceToSave];
-      toast({
-        title: "Success",
-        description: "Invoice saved",
-      });
-    }
-    
-    setSavedInvoices(updatedInvoices);
-    localStorage.setItem('savedInvoices', JSON.stringify(updatedInvoices));
-    
-    // Update current invoice with the ID if it was new
-    setInvoice(invoiceToSave);
-  };
+  useEffect(() => {
+    localStorage.setItem('invoices', JSON.stringify(savedInvoices));
+  }, [savedInvoices]);
 
-  const deleteInvoice = (id: string) => {
-    const updatedInvoices = savedInvoices.filter(inv => inv.id !== id);
-    setSavedInvoices(updatedInvoices);
-    localStorage.setItem('savedInvoices', JSON.stringify(updatedInvoices));
-    toast({
-      title: "Success",
-      description: "Invoice deleted",
-    });
+  const handleSaveInvoice = () => {
+    setIsSaving(true);
+    setTimeout(() => {
+      const invoiceIndex = savedInvoices.findIndex((savedInvoice) => savedInvoice.id === invoice.id);
+
+      if (invoiceIndex !== -1) {
+        // If the invoice exists, update it
+        const updatedInvoices = [...savedInvoices];
+        updatedInvoices[invoiceIndex] = invoice;
+        setSavedInvoices(updatedInvoices);
+      } else {
+        // If the invoice doesn't exist, add it
+        setSavedInvoices([...savedInvoices, invoice]);
+      }
+
+      toast({
+        title: "Success",
+        description: t('button.save'),
+      });
+      setIsSaving(false);
+    }, 500);
   };
 
   const loadInvoice = (invoiceToLoad: Invoice) => {
     setInvoice(invoiceToLoad);
     toast({
       title: "Success",
-      description: "Invoice loaded",
+      description: t('button.load'),
+    });
+  };
+
+  const deleteInvoice = (invoiceId: string) => {
+    setSavedInvoices(savedInvoices.filter((invoice) => invoice.id !== invoiceId));
+    toast({
+      title: "Success",
+      description: t('button.delete'),
     });
   };
 
   const handlePrint = () => {
     window.print();
-    toast({
-      title: "Success",
-      description: "Sent to printer",
-    });
+  };
+
+  const handleDownloadPDF = async () => {
+    try {
+      await generateInvoicePDF(invoice);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to generate PDF.",
+      });
+    }
   };
 
   const handleResetInvoice = () => {
     const newInvoice = {
+      ...emptyInvoice,
       id: uuidv4(),
-      invoiceNumber: 'INV-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000),
-      dateIssued: new Date().toISOString().split('T')[0],
-      dateDue: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-      from: { ...invoice.from },
-      to: {
-        name: '',
-        street: '',
-        city: '',
-        state: '',
-        zipCode: '',
-        country: '',
-        email: '',
-        phone: ''
-      },
-      items: [],
-      notes: '',
-      terms: 'Payment due within 30 days of receipt.',
-      taxRate: 0,
-      taxAmount: 0,
-      subtotal: 0,
-      total: 0,
-      currency: invoice.currency,
-      logo: invoice.logo
+      date: new Date().toISOString().split('T')[0],
+      dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+      items: [{
+        id: uuidv4(),
+        description: '',
+        quantity: 1,
+        price: 0
+      }],
+      fromCustomFields: [],
+      toCustomFields: []
     };
     
     setInvoice(newInvoice);
     toast({
       title: "Success",
-      description: "Created new invoice",
+      description: t('button.new'),
     });
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-secondary/30">
-      <header className="glass border-b border-border/40 shadow-subtle py-6 px-6 md:px-8 mb-8">
-        <div className="container max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div>
-              <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Invoice Generator</h1>
-              <p className="text-muted-foreground mt-1">Create beautiful, professional invoices in seconds</p>
+    <div className="min-h-screen bg-background">
+      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container flex h-14 items-center">
+          <div className="mr-4 flex">
+            <Button variant="ghost" size="icon" onClick={handleResetInvoice}>
+              <FilePlus className="h-4 w-4" />
+              <span className="sr-only">{t('button.new')}</span>
+            </Button>
+          </div>
+          <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
+            <div className="w-full flex-1 md:w-auto md:flex-none">
+              <Input
+                type="search"
+                placeholder="Search invoices..."
+                className="max-w-md lg:max-w-sm"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
             </div>
-            <div className="flex gap-2 w-full md:w-auto">
-              <Button
-                variant="outline"
-                onClick={handleResetInvoice}
-                className="flex-1 md:flex-initial"
-              >
-                <FilePlus size={18} className="mr-2" /> New Invoice
+            <nav className="flex items-center space-x-2">
+              <LanguageSwitcher />
+              <Button variant="outline" size="sm" onClick={handleSaveInvoice}>
+                <Save className="mr-2 h-4 w-4" />
+                {t('button.save')}
               </Button>
-              <Button
-                variant="outline"
-                onClick={handlePrint}
-                className="flex-1 md:flex-initial"
-              >
-                <Printer size={18} className="mr-2" /> Print
+              <Button variant="outline" size="sm" onClick={handlePrint}>
+                <Printer className="mr-2 h-4 w-4" />
+                {t('button.print')}
               </Button>
-              <Button
-                variant="outline"
-                onClick={saveInvoice}
-                className="flex-1 md:flex-initial"
-              >
-                <Save size={18} className="mr-2" /> Save
+              <Button variant="outline" size="sm" onClick={handleDownloadPDF}>
+                <Download className="mr-2 h-4 w-4" />
+                {t('button.download')}
               </Button>
-              <Button
-                onClick={() => generateInvoicePDF(invoice)}
-                className="flex-1 md:flex-initial"
-              >
-                <Download size={18} className="mr-2" /> Download PDF
-              </Button>
-            </div>
+            </nav>
           </div>
         </div>
       </header>
-      
-      <main className="container max-w-7xl pb-16 px-4 md:px-8">
-        {/* Saved Invoices Carousel */}
-        <div className="mb-8 animate-fade-in">
-          <div className="mb-4">
-            <h2 className="text-xl font-medium">Saved Invoices</h2>
-            <p className="text-muted-foreground text-sm">Browse and load your saved invoices</p>
-          </div>
-          <SavedInvoices 
-            savedInvoices={savedInvoices}
-            onDelete={deleteInvoice}
-            onLoad={loadInvoice}
-          />
-        </div>
-        
-        <div className={`grid ${isMobile ? 'grid-cols-1 gap-8' : 'grid-cols-2 gap-12'}`}>
-          <div>
-            <InvoiceForm invoice={invoice} setInvoice={setInvoice} />
-          </div>
-          <div className={`${isMobile ? '' : 'sticky top-8'} h-fit`}>
-            <div className="mb-4">
-              <h2 className="text-xl font-medium">Invoice Preview</h2>
-              <p className="text-muted-foreground text-sm">Live preview of your invoice</p>
-            </div>
-            <InvoicePreview invoice={invoice} />
+
+      {savedInvoices.length > 0 && (
+        <SavedInvoices 
+          invoices={savedInvoices} 
+          onLoad={loadInvoice} 
+          onDelete={deleteInvoice} 
+        />
+      )}
+
+      <div className="container py-6">
+        <div className="grid gap-6 lg:grid-cols-2">
+          <EnhancedInvoiceForm invoice={invoice} onChange={setInvoice} />
+          <div className={`lg:sticky lg:top-20 ${isMobile ? 'mt-6' : ''}`}>
+            <EnhancedInvoicePreview invoice={invoice} />
           </div>
         </div>
-      </main>
-      
-      <footer className="bg-muted/50 py-6 border-t border-border/40 text-center text-muted-foreground text-sm">
-        <div className="container">
-          &copy; {new Date().getFullYear()} Invoice Generator
-        </div>
-      </footer>
+      </div>
     </div>
   );
 };
