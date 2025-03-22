@@ -118,13 +118,18 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
     // Handle nested properties
     if (name.includes('.')) {
       const [parent, child] = name.split('.');
-      setInvoice(prev => ({
-        ...prev,
-        [parent]: {
-          ...prev[parent as keyof typeof prev],
-          [child]: value
+      setInvoice(prev => {
+        if (parent === 'from' || parent === 'to') {
+          return {
+            ...prev,
+            [parent]: {
+              ...prev[parent as keyof typeof prev] as object,
+              [child]: value
+            }
+          };
         }
-      }));
+        return prev;
+      });
     } else {
       setInvoice(prev => ({
         ...prev,
