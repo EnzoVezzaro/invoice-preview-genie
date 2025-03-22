@@ -1,9 +1,11 @@
+
 import React, { useState, useEffect } from 'react';
-import { Invoice } from '@/types/invoice-extended';
+import { Invoice, emptyInvoice } from '@/types/invoice-extended';
 import EnhancedInvoiceForm from '@/components/EnhancedInvoiceForm';
 import EnhancedInvoicePreview from '@/components/EnhancedInvoicePreview';
 import SavedInvoices from '@/components/SavedInvoices';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Download, FilePlus, Printer, Save } from 'lucide-react';
 import { generateInvoicePDF } from '@/utils/pdfGenerator';
 import { toast } from '@/hooks/use-toast';
@@ -11,7 +13,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useLanguage } from '@/contexts/LanguageContext';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
-import { emptyInvoice } from '@/types/invoice-extended';
 
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -92,7 +93,7 @@ const Index = () => {
   };
 
   const handleResetInvoice = () => {
-    const newInvoice = {
+    const newInvoice: Invoice = {
       ...emptyInvoice,
       id: uuidv4(),
       date: new Date().toISOString().split('T')[0],
@@ -101,7 +102,8 @@ const Index = () => {
         id: uuidv4(),
         description: '',
         quantity: 1,
-        price: 0
+        unitPrice: 0,
+        total: 0
       }],
       fromCustomFields: [],
       toCustomFields: []
@@ -155,15 +157,16 @@ const Index = () => {
 
       {savedInvoices.length > 0 && (
         <SavedInvoices 
-          invoices={savedInvoices} 
-          onLoad={loadInvoice} 
-          onDelete={deleteInvoice} 
+          savedInvoices={savedInvoices} 
+          onLoadInvoice={loadInvoice} 
+          onDeleteInvoice={deleteInvoice} 
+          searchQuery={searchQuery}
         />
       )}
 
       <div className="container py-6">
         <div className="grid gap-6 lg:grid-cols-2">
-          <EnhancedInvoiceForm invoice={invoice} onChange={setInvoice} />
+          <EnhancedInvoiceForm invoice={invoice} setInvoice={setInvoice} />
           <div className={`lg:sticky lg:top-20 ${isMobile ? 'mt-6' : ''}`}>
             <EnhancedInvoicePreview invoice={invoice} />
           </div>

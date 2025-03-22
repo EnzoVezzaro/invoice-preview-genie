@@ -8,21 +8,21 @@ import { useLanguage } from '@/contexts/LanguageContext';
 
 interface EnhancedInvoiceFormProps {
   invoice: Invoice;
-  onChange: (invoice: Invoice) => void;
+  setInvoice: (invoice: Invoice) => void;
 }
 
-const EnhancedInvoiceForm: React.FC<EnhancedInvoiceFormProps> = ({ invoice, onChange }) => {
+const EnhancedInvoiceForm: React.FC<EnhancedInvoiceFormProps> = ({ invoice, setInvoice }) => {
   const { t } = useLanguage();
 
   const handleFromCustomFieldsChange = (fields: { key: string; value: string }[]) => {
-    onChange({
+    setInvoice({
       ...invoice,
       fromCustomFields: fields
     });
   };
 
   const handleToCustomFieldsChange = (fields: { key: string; value: string }[]) => {
-    onChange({
+    setInvoice({
       ...invoice,
       toCustomFields: fields
     });
@@ -30,7 +30,7 @@ const EnhancedInvoiceForm: React.FC<EnhancedInvoiceFormProps> = ({ invoice, onCh
 
   return (
     <div className="space-y-4">
-      <InvoiceForm invoice={invoice} onChange={onChange} />
+      <InvoiceForm invoice={invoice} setInvoice={setInvoice} />
       
       {/* From Custom Fields */}
       <Card>
