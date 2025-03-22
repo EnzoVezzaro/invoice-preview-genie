@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Invoice } from '@/types/invoice';
 import InvoiceForm from '@/components/InvoiceForm';
@@ -7,7 +6,7 @@ import SavedInvoices from '@/components/SavedInvoices';
 import { Button } from '@/components/ui/button';
 import { Download, FilePlus, Printer, Save } from 'lucide-react';
 import { generateInvoicePDF } from '@/utils/pdfGenerator';
-import { toast } from 'sonner';
+import { toast } from '@/hooks/use-toast';
 import { v4 as uuidv4 } from 'uuid';
 import { useIsMobile } from '@/hooks/use-mobile';
 
@@ -88,11 +87,17 @@ const Index = () => {
       updatedInvoices = savedInvoices.map(inv => 
         inv.id === invoiceToSave.id ? invoiceToSave : inv
       );
-      toast.success('Invoice updated');
+      toast({
+        title: "Success",
+        description: "Invoice updated",
+      });
     } else {
       // Add new invoice
       updatedInvoices = [...savedInvoices, invoiceToSave];
-      toast.success('Invoice saved');
+      toast({
+        title: "Success",
+        description: "Invoice saved",
+      });
     }
     
     setSavedInvoices(updatedInvoices);
@@ -106,17 +111,26 @@ const Index = () => {
     const updatedInvoices = savedInvoices.filter(inv => inv.id !== id);
     setSavedInvoices(updatedInvoices);
     localStorage.setItem('savedInvoices', JSON.stringify(updatedInvoices));
-    toast.success('Invoice deleted');
+    toast({
+      title: "Success",
+      description: "Invoice deleted",
+    });
   };
 
   const loadInvoice = (invoiceToLoad: Invoice) => {
     setInvoice(invoiceToLoad);
-    toast.success('Invoice loaded');
+    toast({
+      title: "Success",
+      description: "Invoice loaded",
+    });
   };
 
   const handlePrint = () => {
     window.print();
-    toast.success('Sent to printer');
+    toast({
+      title: "Success",
+      description: "Sent to printer",
+    });
   };
 
   const handleResetInvoice = () => {
@@ -148,7 +162,10 @@ const Index = () => {
     };
     
     setInvoice(newInvoice);
-    toast.success('Created new invoice');
+    toast({
+      title: "Success",
+      description: "Created new invoice",
+    });
   };
 
   return (
