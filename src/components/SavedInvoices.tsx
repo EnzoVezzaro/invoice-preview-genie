@@ -15,18 +15,28 @@ import { useIsMobile } from '@/hooks/use-mobile';
 
 interface SavedInvoicesProps {
   savedInvoices: Invoice[];
-  onDelete: (id: string) => void;
-  onLoad: (invoice: Invoice) => void;
+  onDeleteInvoice: (id: string) => void;
+  onLoadInvoice: (invoice: Invoice) => void;
+  searchQuery?: string;
 }
 
 const SavedInvoices: React.FC<SavedInvoicesProps> = ({ 
   savedInvoices, 
-  onDelete, 
-  onLoad 
+  onDeleteInvoice, 
+  onLoadInvoice,
+  searchQuery = ''
 }) => {
   const isMobile = useIsMobile();
+  
+  // Filter invoices based on search query
+  const filteredInvoices = searchQuery 
+    ? savedInvoices.filter(invoice => 
+        invoice.invoiceNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        invoice.to.name.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : savedInvoices;
 
-  if (savedInvoices.length === 0) {
+  if (filteredInvoices.length === 0) {
     return (
       <div className="w-full bg-muted/40 rounded-lg p-12 flex flex-col items-center justify-center text-center border border-dashed border-muted-foreground/50 animate-fade-in">
         <div className="rounded-full bg-primary/10 p-4 mb-4">
@@ -43,14 +53,14 @@ const SavedInvoices: React.FC<SavedInvoicesProps> = ({
   return (
     <Carousel className="w-full">
       <CarouselContent>
-        {savedInvoices.map((invoice) => (
+        {filteredInvoices.map((invoice) => (
           <CarouselItem key={invoice.id} className={isMobile ? "basis-full" : "basis-1/2"}>
             <div className="relative group">
               <div className="absolute top-0 right-0 z-10 opacity-0 group-hover:opacity-100 transition-opacity flex gap-2 m-4">
                 <Button 
                   variant="secondary" 
                   size="sm" 
-                  onClick={() => onLoad(invoice)}
+                  onClick={() => onLoadInvoice(invoice)}
                   className="bg-background/80 backdrop-blur-sm"
                 >
                   <ArrowUpToLine size={16} className="mr-1" />
@@ -59,7 +69,7 @@ const SavedInvoices: React.FC<SavedInvoicesProps> = ({
                 <Button 
                   variant="destructive" 
                   size="sm" 
-                  onClick={() => onDelete(invoice.id || '')}
+                  onClick={() => onDeleteInvoice(invoice.id || '')}
                   className="bg-destructive/80 backdrop-blur-sm"
                 >
                   <Trash2 size={16} className="mr-1" />
