@@ -19,6 +19,7 @@ export interface InvoiceItem {
 }
 
 export interface Invoice {
+  id?: string; // Added unique ID for saved invoices
   invoiceNumber: string;
   dateIssued: string;
   dateDue: string;

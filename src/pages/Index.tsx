@@ -1,10 +1,11 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Invoice } from '@/types/invoice';
 import InvoiceForm from '@/components/InvoiceForm';
 import InvoicePreview from '@/components/InvoicePreview';
+import SavedInvoices from '@/components/SavedInvoices';
 import { Button } from '@/components/ui/button';
-import { Download, FilePlus, Printer } from 'lucide-react';
+import { Download, FilePlus, Printer, Save } from 'lucide-react';
 import { generateInvoicePDF } from '@/utils/pdfGenerator';
 import { toast } from 'sonner';
 import { v4 as uuidv4 } from 'uuid';
@@ -12,7 +13,9 @@ import { useIsMobile } from '@/hooks/use-mobile';
 
 const Index = () => {
   const isMobile = useIsMobile();
+  const [savedInvoices, setSavedInvoices] = useState<Invoice[]>([]);
   const [invoice, setInvoice] = useState<Invoice>({
+    id: uuidv4(),
     invoiceNumber: 'INV-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000),
     dateIssued: new Date().toISOString().split('T')[0],
     dateDue: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // +30 days
@@ -55,6 +58,62 @@ const Index = () => {
     logo: ''
   });
 
+  // Load saved invoices from localStorage on component mount
+  useEffect(() => {
+    const storedInvoices = localStorage.getItem('savedInvoices');
+    if (storedInvoices) {
+      try {
+        const parsedInvoices = JSON.parse(storedInvoices);
+        setSavedInvoices(parsedInvoices);
+      } catch (error) {
+        console.error('Error parsing saved invoices:', error);
+        localStorage.removeItem('savedInvoices');
+      }
+    }
+  }, []);
+
+  const saveInvoice = () => {
+    // Make sure the invoice has an ID
+    const invoiceToSave = { ...invoice };
+    if (!invoiceToSave.id) {
+      invoiceToSave.id = uuidv4();
+    }
+    
+    // Check if the invoice already exists
+    const exists = savedInvoices.some(inv => inv.id === invoiceToSave.id);
+    
+    let updatedInvoices;
+    if (exists) {
+      // Update existing invoice
+      updatedInvoices = savedInvoices.map(inv => 
+        inv.id === invoiceToSave.id ? invoiceToSave : inv
+      );
+      toast.success('Invoice updated');
+    } else {
+      // Add new invoice
+      updatedInvoices = [...savedInvoices, invoiceToSave];
+      toast.success('Invoice saved');
+    }
+    
+    setSavedInvoices(updatedInvoices);
+    localStorage.setItem('savedInvoices', JSON.stringify(updatedInvoices));
+    
+    // Update current invoice with the ID if it was new
+    setInvoice(invoiceToSave);
+  };
+
+  const deleteInvoice = (id: string) => {
+    const updatedInvoices = savedInvoices.filter(inv => inv.id !== id);
+    setSavedInvoices(updatedInvoices);
+    localStorage.setItem('savedInvoices', JSON.stringify(updatedInvoices));
+    toast.success('Invoice deleted');
+  };
+
+  const loadInvoice = (invoiceToLoad: Invoice) => {
+    setInvoice(invoiceToLoad);
+    toast.success('Invoice loaded');
+  };
+
   const handlePrint = () => {
     window.print();
     toast.success('Sent to printer');
@@ -62,17 +121,30 @@ const Index = () => {
 
   const handleResetInvoice = () => {
     const newInvoice = {
-      ...invoice,
+      id: uuidv4(),
       invoiceNumber: 'INV-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000),
       dateIssued: new Date().toISOString().split('T')[0],
       dateDue: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+      from: { ...invoice.from },
+      to: {
+        name: '',
+        street: '',
+        city: '',
+        state: '',
+        zipCode: '',
+        country: '',
+        email: '',
+        phone: ''
+      },
       items: [],
       notes: '',
-      terms: '',
+      terms: 'Payment due within 30 days of receipt.',
       taxRate: 0,
       taxAmount: 0,
       subtotal: 0,
       total: 0,
+      currency: invoice.currency,
+      logo: invoice.logo
     };
     
     setInvoice(newInvoice);
@@ -104,6 +176,13 @@ const Index = () => {
                 <Printer size={18} className="mr-2" /> Print
               </Button>
               <Button
+                variant="outline"
+                onClick={saveInvoice}
+                className="flex-1 md:flex-initial"
+              >
+                <Save size={18} className="mr-2" /> Save
+              </Button>
+              <Button
                 onClick={() => generateInvoicePDF(invoice)}
                 className="flex-1 md:flex-initial"
               >
@@ -115,6 +194,19 @@ const Index = () => {
       </header>
       
       <main className="container max-w-7xl pb-16 px-4 md:px-8">
+        {/* Saved Invoices Carousel */}
+        <div className="mb-8 animate-fade-in">
+          <div className="mb-4">
+            <h2 className="text-xl font-medium">Saved Invoices</h2>
+            <p className="text-muted-foreground text-sm">Browse and load your saved invoices</p>
+          </div>
+          <SavedInvoices 
+            savedInvoices={savedInvoices}
+            onDelete={deleteInvoice}
+            onLoad={loadInvoice}
+          />
+        </div>
+        
         <div className={`grid ${isMobile ? 'grid-cols-1 gap-8' : 'grid-cols-2 gap-12'}`}>
           <div>
             <InvoiceForm invoice={invoice} setInvoice={setInvoice} />
