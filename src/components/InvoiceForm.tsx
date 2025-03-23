@@ -224,6 +224,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
                   <SelectItem value="£">GBP (£)</SelectItem>
                   <SelectItem value="¥">JPY (¥)</SelectItem>
                   <SelectItem value="₹">INR (₹)</SelectItem>
+                  <SelectItem value="DOP">DOP (RD$)</SelectItem>
                 </SelectContent>
               </Select>
             </div>

@@ -9,9 +9,17 @@ import { generateInvoicePDF } from '@/utils/pdfGenerator';
 import { toast } from '@/hooks/use-toast';
 import { v4 as uuidv4 } from 'uuid';
 import { useIsMobile } from '@/hooks/use-mobile';
+import useTranslation from '@/hooks/use-translation';
+import i18next from '@/i18n';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Card, CardContent } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 const Index = () => {
   const isMobile = useIsMobile();
+  const t = useTranslation();
+  const [language, setLanguage] = useState(i18next.language);
   const [savedInvoices, setSavedInvoices] = useState<Invoice[]>([]);
   const [invoice, setInvoice] = useState<Invoice>({
     id: uuidv4(),
@@ -19,23 +27,23 @@ const Index = () => {
     dateIssued: new Date().toISOString().split('T')[0],
     dateDue: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // +30 days
     from: {
-      name: 'Your Business Name',
-      street: '123 Business Street',
-      city: 'San Francisco',
-      state: 'CA',
-      zipCode: '94107',
-      country: 'United States',
+      name: t('businessName'),
+      street: t('streetAddress'),
+      city: t('city'),
+      state: t('state'),
+      zipCode: t('zipCode'),
+      country: t('country'),
       email: 'contact@yourbusiness.com',
       phone: '(123) 456-7890'
     },
     to: {
-      name: 'Client Name',
-      street: '456 Client Avenue',
-      city: 'Los Angeles',
-      state: 'CA',
-      zipCode: '90001',
-      country: 'United States',
-      email: 'client@example.com',
+      name: t('clientName'),
+      street: '',
+      city: '',
+      state: '',
+      zipCode: '',
+      country: '',
+      email: '',
       phone: ''
     },
     items: [
@@ -47,8 +55,8 @@ const Index = () => {
         total: 1200
       }
     ],
-    notes: 'Thank you for your business!',
-    terms: 'Payment due within 30 days of receipt.',
+    notes: t('notes'),
+    terms: t('termsAndConditions'),
     taxRate: 10,
     taxAmount: 120,
     subtotal: 1200,
@@ -88,15 +96,15 @@ const Index = () => {
         inv.id === invoiceToSave.id ? invoiceToSave : inv
       );
       toast({
-        title: "Success",
-        description: "Invoice updated",
+        title: t('success'),
+        description: t('invoiceUpdated'),
       });
     } else {
       // Add new invoice to the beginning of the array
       updatedInvoices = [invoiceToSave, ...savedInvoices];
       toast({
-        title: "Success",
-        description: "Invoice saved",
+        title: t('success'),
+        description: t('invoiceSaved'),
       });
     }
     
@@ -127,7 +135,7 @@ const Index = () => {
       taxAmount: 0,
       subtotal: 0,
       total: 0,
-      currency: invoice.currency,
+      currency: '$',
       logo: invoice.logo
     });
   };
@@ -137,24 +145,24 @@ const Index = () => {
     setSavedInvoices(updatedInvoices);
     localStorage.setItem('savedInvoices', JSON.stringify(updatedInvoices));
     toast({
-      title: "Success",
-      description: "Invoice deleted",
+      title: t('success'),
+      description: t('invoiceDeleted'),
     });
   };
 
   const loadInvoice = (invoiceToLoad: Invoice) => {
     setInvoice(invoiceToLoad);
     toast({
-      title: "Success",
-      description: "Invoice loaded",
+      title: t('success'),
+      description: t('invoiceLoaded'),
     });
   };
 
   const handlePrint = () => {
     window.print();
     toast({
-      title: "Success",
-      description: "Sent to printer",
+      title: t('success'),
+      description: t('sentToPrinter'),
     });
   };
 
@@ -188,9 +196,18 @@ const Index = () => {
     
     setInvoice(newInvoice);
     toast({
-      title: "Success",
-      description: "Created new invoice",
+      title: t('success'),
+      description: t('createdNewInvoice'),
     });
+  };
+
+  const changeLanguage = () => {
+    i18next.changeLanguage(i18next.language === 'es' ? 'en' : 'es');
+    setLanguage(i18next.language);
+  };
+
+  const getFlag = () => {
+    return i18next.language === 'es' ? "🇺🇸" : "🇩🇴";
   };
 
   return (
@@ -199,8 +216,8 @@ const Index = () => {
         <div className="container max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
-              <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Invoice Generator</h1>
-              <p className="text-muted-foreground mt-1">Create beautiful, professional invoices in seconds</p>
+              <h1 className="text-2xl md:text-3xl font-bold tracking-tight">{t('invoiceGenerator')}</h1>
+              <p className="text-muted-foreground mt-1">{t('createBeautifulInvoices')}</p>
             </div>
             <div className="flex gap-2 w-full md:w-auto">
               <Button
@@ -208,27 +225,34 @@ const Index = () => {
                 onClick={handleResetInvoice}
                 className="flex-1 md:flex-initial"
               >
-                <FilePlus size={18} className="mr-2" /> New Invoice
+                <FilePlus size={18} className="mr-2" /> {t('newInvoice')}
               </Button>
               <Button
                 variant="outline"
                 onClick={handlePrint}
                 className="flex-1 md:flex-initial"
               >
-                <Printer size={18} className="mr-2" /> Print
+                <Printer size={18} className="mr-2" /> {t('print')}
               </Button>
               <Button
                 variant="outline"
                 onClick={saveInvoice}
                 className="flex-1 md:flex-initial"
               >
-                <Save size={18} className="mr-2" /> Save
+                <Save size={18} className="mr-2" /> {t('save')}
               </Button>
               <Button
                 onClick={() => generateInvoicePDF(invoice)}
                 className="flex-1 md:flex-initial"
               >
-                <Download size={18} className="mr-2" /> Download PDF
+                <Download size={18} className="mr-2" /> {t('downloadPDF')}
+              </Button>
+              <Button
+                variant="ghost"
+                onClick={changeLanguage}
+                className="flex-1 md:flex-initial text-2xl"
+              >
+                {getFlag()}
               </Button>
             </div>
           </div>
@@ -239,8 +263,8 @@ const Index = () => {
         {/* Saved Invoices Carousel */}
         <div className="mb-8 animate-fade-in">
           <div className="mb-4">
-            <h2 className="text-xl font-medium">Saved Invoices</h2>
-            <p className="text-muted-foreground text-sm">Browse and load your saved invoices</p>
+            <h2 className="text-xl font-medium">{t('savedInvoices')}</h2>
+            <p className="text-muted-foreground text-sm">{t('browseAndLoadInvoices')}</p>
           </div>
           <SavedInvoices 
             savedInvoices={savedInvoices}
