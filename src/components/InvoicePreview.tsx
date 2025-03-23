@@ -44,6 +44,12 @@ const InvoicePreview: React.FC<InvoicePreviewProps> = ({ invoice }) => {
             <div>{invoice.from.country}</div>
             {invoice.from.phone && <div className="mt-2">Phone: {invoice.from.phone}</div>}
             {invoice.from.email && <div>Email: {invoice.from.email}</div>}
+            {invoice.from.customFields &&
+              Object.entries(invoice.from.customFields).map(([key, value]) => (
+                <div key={key}>
+                  {key}: {value}
+                </div>
+              ))}
           </div>
           
           <div>
@@ -54,6 +60,12 @@ const InvoicePreview: React.FC<InvoicePreviewProps> = ({ invoice }) => {
             <div>{invoice.to.country}</div>
             {invoice.to.phone && <div className="mt-2">Phone: {invoice.to.phone}</div>}
             {invoice.to.email && <div>Email: {invoice.to.email}</div>}
+            {invoice.to.customFields &&
+              Object.entries(invoice.to.customFields).map(([key, value]) => (
+                <div key={key}>
+                  {key}: {value}
+                </div>
+              ))}
           </div>
         </div>
 

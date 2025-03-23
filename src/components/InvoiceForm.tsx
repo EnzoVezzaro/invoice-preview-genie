@@ -12,6 +12,7 @@ import InvoiceItem from './InvoiceItem';
 import { Plus, Upload } from 'lucide-react';
 import { toast } from 'sonner';
 import { v4 as uuidv4 } from 'uuid';
+import CustomFieldInput from './CustomFieldInput';
 
 const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
   const handleAddItem = () => {
@@ -339,6 +340,75 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
                   />
                 </div>
               </div>
+
+              {/* Custom Fields Section */}
+              <div className="space-y-2">
+                <Label>Custom Fields</Label>
+                {Object.entries(invoice.from.customFields || {}).map(([key, value]) => (
+                  <div key={key} className="flex gap-2">
+                    <CustomFieldInput
+                      keyName={key}
+                      addressType="from"
+                      invoice={invoice}
+                      setInvoice={setInvoice}
+                    />
+                    <Input
+                      placeholder="Field Value"
+                      value={value}
+                      onChange={(e) => {
+                        const newValue = e.target.value;
+                        setInvoice((prev) => ({
+                          ...prev,
+                          from: {
+                            ...prev.from,
+                            customFields: {
+                              ...(prev.from.customFields || {}),
+                              [key]: newValue,
+                            },
+                          },
+                        }));
+                      }}
+                    />
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => {
+                        setInvoice((prev) => {
+                          const newCustomFields = { ...prev.from.customFields };
+                          delete newCustomFields[key];
+                          return {
+                            ...prev,
+                            from: {
+                              ...prev.from,
+                              customFields: newCustomFields,
+                            },
+                          };
+                        });
+                      }}
+                    >
+                      Remove
+                    </Button>
+                  </div>
+                ))}
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => {
+                    setInvoice((prev) => ({
+                      ...prev,
+                      from: {
+                        ...prev.from,
+                        customFields: {
+                          ...(prev.from.customFields || {}),
+                          [`New Field ${Object.keys(prev.from.customFields || {}).length + 1}`]: "",
+                        },
+                      },
+                    }));
+                  }}
+                >
+                  Add Custom Field
+                </Button>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -449,6 +519,75 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
                     className="form-input"
                   />
                 </div>
+              </div>
+
+              {/* Custom Fields Section */}
+              <div className="space-y-2">
+                <Label>Custom Fields</Label>
+                {Object.entries(invoice.to.customFields || {}).map(([key, value]) => (
+                  <div key={key} className="flex gap-2">
+                    <CustomFieldInput
+                      keyName={key}
+                      addressType="to"
+                      invoice={invoice}
+                      setInvoice={setInvoice}
+                    />
+                    <Input
+                      placeholder="Field Value"
+                      value={value}
+                      onChange={(e) => {
+                        const newValue = e.target.value;
+                        setInvoice((prev) => ({
+                          ...prev,
+                          to: {
+                            ...prev.to,
+                            customFields: {
+                              ...(prev.to.customFields || {}),
+                              [key]: newValue,
+                            },
+                          },
+                        }));
+                      }}
+                    />
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => {
+                        setInvoice((prev) => {
+                          const newCustomFields = { ...prev.to.customFields };
+                          delete newCustomFields[key];
+                          return {
+                            ...prev,
+                            to: {
+                              ...prev.to,
+                              customFields: newCustomFields,
+                            },
+                          };
+                        });
+                      }}
+                    >
+                      Remove
+                    </Button>
+                  </div>
+                ))}
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => {
+                    setInvoice((prev) => ({
+                      ...prev,
+                      to: {
+                        ...prev.to,
+                        customFields: {
+                          ...(prev.to.customFields || {}),
+                          [`New Field ${Object.keys(prev.to.customFields || {}).length + 1}`]: "",
+                        },
+                      },
+                    }));
+                  }}
+                >
+                  Add Custom Field
+                </Button>
               </div>
             </div>
           </CardContent>

@@ -8,6 +8,7 @@ export interface Address {
   country: string;
   email?: string;
   phone?: string;
+  customFields?: { [key: string]: string };
 }
 
 export interface InvoiceItem {
