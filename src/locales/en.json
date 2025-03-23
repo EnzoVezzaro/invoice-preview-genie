@@ -5,6 +5,7 @@
   "print": "Print",
   "save": "Save",
   "downloadPDF": "Download PDF",
+  "downloadingPDF": "Downloading PDF",
   "savedInvoices": "Saved Invoices",
   "browseAndLoadInvoices": "Browse and load your saved invoices",
   "invoiceInformation": "Invoice Information",

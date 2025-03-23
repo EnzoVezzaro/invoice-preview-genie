@@ -5,6 +5,7 @@
   "print": "Imprimir",
   "save": "Guardar",
   "downloadPDF": "Descargar PDF",
+  "downloadingPDF": "Descargando PDF",
   "savedInvoices": "Facturas Guardadas",
   "browseAndLoadInvoices": "Navega y carga tus facturas guardadas",
   "invoiceInformation": "Información de la Factura",

@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Download, FilePlus, Printer, Save } from 'lucide-react';
 import { generateInvoicePDF } from '@/utils/pdfGenerator';
 import { toast } from '@/hooks/use-toast';
+import { Loader2 } from "lucide-react"
 import { v4 as uuidv4 } from 'uuid';
 import { useIsMobile } from '@/hooks/use-mobile';
 import useTranslation from '@/hooks/use-translation';
@@ -19,6 +20,7 @@ import { Label } from '@/components/ui/label';
 const Index = () => {
   const isMobile = useIsMobile();
   const t = useTranslation();
+  const [downloading, setDownloading] = useState(false);
   const [language, setLanguage] = useState(i18next.language);
   const [savedInvoices, setSavedInvoices] = useState<Invoice[]>([]);
   const [invoice, setInvoice] = useState<Invoice>({
@@ -239,11 +241,28 @@ const Index = () => {
               >
                 <Save size={18} className="mr-2" /> {t('save')}
               </Button>
-              <Button
-                onClick={() => generateInvoicePDF(invoice)}
+             <Button
+                onClick={async () => {
+                  setDownloading(true);
+                  try {
+                    await generateInvoicePDF(invoice);
+                  } finally {
+                    setDownloading(false);
+                  }
+                }}
                 className="flex-1 md:flex-initial"
+                disabled={downloading}
               >
-                <Download size={18} className="mr-2" /> {t('downloadPDF')}
+                {downloading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    {t('downloadingPDF')}
+                  </>
+                ) : (
+                  <>
+                    <Download size={18} className="mr-2" /> {t('downloadPDF')}
+                  </>
+                )}
               </Button>
               <Button
                 variant="ghost"
