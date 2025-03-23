@@ -84,5 +84,6 @@
   "additionalInformation": "Additional Information",
   "invoiceNotes": "Invoice Notes",
   "invoiceTermsAndConditions": "Invoice Terms & Conditions",
-  "downloading": "Descargando..."
+  "downloading": "Descargando...",
+  "addAnyNotes": "Add any notes you want to include on the invoice"
 }
