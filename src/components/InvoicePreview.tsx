@@ -73,10 +73,10 @@ const InvoicePreview: React.FC<InvoicePreviewProps> = ({ invoice, className }) =
 
         <div className="mb-8">
           <div className="grid grid-cols-12 gap-2 py-2 font-medium text-sm border-b border-border">
-            <div className="col-span-6">{t('invoiceItemsDescription')}</div>
-            <div className="col-span-2 text-right">{t('invoiceItemsQuantity')}</div>
-            <div className="col-span-2 text-right">{t('invoiceItemsUnitPrice')}</div>
-            <div className="col-span-2 text-right">{t('invoiceItemsTotal')}</div>
+            <div className="col-span-5">{t('invoiceItemsDescription')}</div>
+            <div className="col-span-1 text-right">{t('invoiceItemsQuantity')}</div>
+            <div className="col-span-3 text-right">{t('invoiceItemsUnitPrice')}</div>
+            <div className="col-span-3 text-right">{t('invoiceItemsTotal')}</div>
           </div>
           
           {invoice.items.length === 0 ? (
@@ -86,10 +86,10 @@ const InvoicePreview: React.FC<InvoicePreviewProps> = ({ invoice, className }) =
           ) : (
             invoice.items.map((item, index) => (
               <div key={item.id} className="grid grid-cols-12 gap-2 py-3 border-b border-border/40 text-sm">
-                <div className="col-span-6">{item.description || t('itemDescription')}</div>
-                <div className="col-span-2 text-right">{item.quantity}</div>
-                <div className="col-span-2 text-right">{invoice.currency} {item.unitPrice.toFixed(2)}</div>
-                <div className="col-span-2 text-right">{invoice.currency} {item.total.toFixed(2)}</div>
+                <div className="col-span-5">{item.description || t('itemDescription')}</div>
+                <div className="col-span-1 text-right">{item.quantity}</div>
+                <div className="col-span-3 text-right">{invoice.currency} {item.unitPrice.toFixed(2)}</div>
+                <div className="col-span-3 text-right">{invoice.currency} {item.total.toFixed(2)}</div>
               </div>
             ))
           )}

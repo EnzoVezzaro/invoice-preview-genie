@@ -32,7 +32,7 @@ const InvoiceItem: React.FC<Props> = ({ item, onUpdate, onRemove, currency }) =>
 
   return (
     <div className="grid grid-cols-12 gap-2 mb-2 items-center animate-fade-in">
-      <div className="col-span-5">
+      <div className="col-span-4">
         <Input
           name="description"
           value={item.description}
@@ -41,7 +41,7 @@ const InvoiceItem: React.FC<Props> = ({ item, onUpdate, onRemove, currency }) =>
           className="form-input"
         />
       </div>
-      <div className="col-span-2">
+      <div className="col-span-2 min-w-[80px]">
         <Input
           name="quantity"
           type="number"
@@ -69,9 +69,9 @@ const InvoiceItem: React.FC<Props> = ({ item, onUpdate, onRemove, currency }) =>
           />
         </div>
       </div>
-      <div className="col-span-2 text-right pr-2">
+      <div className="col-span-3 text-right pr-2">
         <div className="form-input bg-secondary/50 flex items-center justify-end">
-          <span>{currency} {item.total.toFixed(2)}</span>
+          <span className="whitespace-nowrap">{currency} {item.total.toFixed(2)}</span>
         </div>
       </div>
       <div className="col-span-1 flex justify-center">

@@ -619,7 +619,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
           
           <div className="space-y-1">
             <div className="grid grid-cols-12 gap-2 mb-2 text-sm font-medium text-muted-foreground">
-              <div className="col-span-5">{t('description')}</div>
+              <div className="col-span-4">{t('description')}</div>
               <div className="col-span-2">{t('quantity')}</div>
               <div className="col-span-2">{t('unitPrice')}</div>
               <div className="col-span-2 text-right pr-2">{t('total')}</div>

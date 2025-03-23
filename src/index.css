@@ -108,6 +108,12 @@
   }
 
   /* Glassmorphism utilities */
+  .no-glass {
+    opacity: 1 !important;
+    background-color: "#FFF" !important;
+    color: "#000" !important;
+  }
+
   .glass {
     @apply border border-white/20 dark:border-white/10;
   }
