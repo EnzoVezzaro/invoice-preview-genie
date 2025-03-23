@@ -121,7 +121,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
       setInvoice(prev => ({
         ...prev,
         [parent]: {
-          ...prev[parent as keyof typeof prev],
+          ...((prev[parent as keyof typeof prev] as object) ?? {}),
           [child]: value
         }
       }));

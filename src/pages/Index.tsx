@@ -92,8 +92,8 @@ const Index = () => {
         description: "Invoice updated",
       });
     } else {
-      // Add new invoice
-      updatedInvoices = [...savedInvoices, invoiceToSave];
+      // Add new invoice to the beginning of the array
+      updatedInvoices = [invoiceToSave, ...savedInvoices];
       toast({
         title: "Success",
         description: "Invoice saved",
@@ -102,9 +102,34 @@ const Index = () => {
     
     setSavedInvoices(updatedInvoices);
     localStorage.setItem('savedInvoices', JSON.stringify(updatedInvoices));
-    
+
     // Update current invoice with the ID if it was new
-    setInvoice(invoiceToSave);
+    setInvoice({
+      id: uuidv4(),
+      invoiceNumber: 'INV-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000),
+      dateIssued: new Date().toISOString().split('T')[0],
+      dateDue: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+      from: { ...invoice.from },
+      to: {
+        name: '',
+        street: '',
+        city: '',
+        state: '',
+        zipCode: '',
+        country: '',
+        email: '',
+        phone: ''
+      },
+      items: [],
+      notes: '',
+      terms: 'Payment due within 30 days of receipt.',
+      taxRate: 0,
+      taxAmount: 0,
+      subtotal: 0,
+      total: 0,
+      currency: invoice.currency,
+      logo: invoice.logo
+    });
   };
 
   const deleteInvoice = (id: string) => {
