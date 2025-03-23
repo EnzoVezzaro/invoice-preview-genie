@@ -78,5 +78,10 @@
   "newField": "New Field",
   "itemDescription": "Item description",
   "invoicePreview": "Invoice Preview",
-  "livePreviewOfInvoice": "Live preview of your invoice"
+  "livePreviewOfInvoice": "Live preview of your invoice",
+  "clientStreetAddress": "Client Street Address",
+  "clientEmail": "Client Email",
+  "additionalInformation": "Additional Information",
+  "invoiceNotes": "Invoice Notes",
+  "invoiceTermsAndConditions": "Invoice Terms & Conditions"
 }
