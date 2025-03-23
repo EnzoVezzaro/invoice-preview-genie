@@ -51,7 +51,7 @@ const Index = () => {
     items: [
       {
         id: uuidv4(),
-        description: 'Website Design',
+        description: 'Consulting Services',
         quantity: 1,
         unitPrice: 1200,
         total: 1200
@@ -227,13 +227,18 @@ const Index = () => {
               >
                 <FilePlus size={18} className="mr-2" /> {t('newInvoice')}
               </Button>
-              <Button
+              {
+                /**
+                 * <Button
                 variant="outline"
                 onClick={handlePrint}
                 className="flex-1 md:flex-initial"
               >
                 <Printer size={18} className="mr-2" /> {t('print')}
               </Button>
+                 * 
+                 */
+              }
               <Button
                 variant="outline"
                 onClick={saveInvoice}
