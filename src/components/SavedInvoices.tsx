@@ -1,5 +1,6 @@
+
 import React from 'react';
-import { Invoice } from '@/types/invoice-extended';
+import { Invoice } from '@/types/invoice';
 import { 
   Carousel, 
   CarouselContent, 
