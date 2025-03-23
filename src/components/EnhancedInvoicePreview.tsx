@@ -1,7 +1,9 @@
 
 import React from 'react';
 import InvoicePreview from './InvoicePreview';
-import { Invoice } from '@/types/invoice-extended';
+import { Invoice } from '@/types/invoice';
+import { Button } from '@/components/ui/button';
+import { generateInvoicePDF } from '@/utils/pdfGenerator';
 
 interface EnhancedInvoicePreviewProps {
   invoice: Invoice;
@@ -14,7 +16,7 @@ const EnhancedInvoicePreview: React.FC<EnhancedInvoicePreviewProps> = ({ invoice
       margin-top: 4px;
       display: flex;
     }
-    .custom-field-key {
+    .custom-field-type {
       font-weight: 500;
       margin-right: 4px;
     }
@@ -23,29 +25,24 @@ const EnhancedInvoicePreview: React.FC<EnhancedInvoicePreviewProps> = ({ invoice
     }
   `;
 
+  const handleDownload = () => {
+    generateInvoicePDF(invoice);
+  };
+
   return (
     <div className="relative">
       <style>{customFieldsStyle}</style>
       <InvoicePreview invoice={invoice} />
-      
+      <Button onClick={handleDownload}>Download</Button>
+
       {/* Inject custom fields into preview */}
-      {(invoice.fromCustomFields?.length > 0 || invoice.toCustomFields?.length > 0) && (
+      {invoice.customFields?.length > 0 && (
         <div className="absolute" style={{ visibility: 'hidden' }}>
-          <div id="fromCustomFields">
-            {invoice.fromCustomFields?.map((field, index) => (
-              field.key && field.value ? (
+          <div id="customFields">
+            {invoice.customFields?.map((field, index) => (
+              field.type && field.value ? (
                 <div key={index} className="custom-field">
-                  <span className="custom-field-key">{field.key}:</span>
-                  <span className="custom-field-value">{field.value}</span>
-                </div>
-              ) : null
-            ))}
-          </div>
-          <div id="toCustomFields">
-            {invoice.toCustomFields?.map((field, index) => (
-              field.key && field.value ? (
-                <div key={index} className="custom-field">
-                  <span className="custom-field-key">{field.key}:</span>
+                  <span className="custom-field-type">{field.type}:</span>
                   <span className="custom-field-value">{field.value}</span>
                 </div>
               ) : null

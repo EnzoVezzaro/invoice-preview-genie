@@ -1,4 +1,3 @@
-
 export interface Address {
   name: string;
   street: string;
@@ -34,6 +33,7 @@ export interface Invoice {
   total: number;
   currency: string;
   logo?: string;
+  customFields: { type: string; value: string }[];
 }
 
 export interface InvoiceFormProps {

@@ -1,4 +1,3 @@
-
 import { Invoice } from '@/types/invoice';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
@@ -67,15 +66,32 @@ export const generateInvoicePDF = (invoice: Invoice): void => {
     invoice.to.phone && doc.text(`Phone: ${invoice.to.phone}`, pageWidth / 2, yPos + 35);
     invoice.to.email && doc.text(`Email: ${invoice.to.email}`, pageWidth / 2, yPos + 42);
 
-    yPos += 60;
+    // Add custom fields
+    if (invoice.customFields && invoice.customFields.length > 0) {
+      yPos += 50;
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Custom Fields:', margin, yPos);
+      doc.setFont('helvetica', 'normal');
+      yPos += 7;
+
+      invoice.customFields.forEach((field) => {
+        if (field.type && field.value) {
+          doc.text(`${field.type}: ${field.value}`, margin, yPos);
+          yPos += 7;
+        }
+      });
+    }
+
+    yPos += 10;
 
     // Add invoice items
     const tableColumn = ["Description", "Quantity", `Unit Price (${invoice.currency})`, `Total (${invoice.currency})`];
-    const tableRows = invoice.items.map(item => [
+    const tableRows = invoice.items.map((item) => [
       item.description,
       item.quantity.toString(),
       item.unitPrice.toFixed(2),
-      item.total.toFixed(2)
+      item.total.toFixed(2),
     ]);
 
     doc.autoTable({
@@ -85,7 +101,7 @@ export const generateInvoicePDF = (invoice: Invoice): void => {
       theme: 'grid',
       headStyles: { fillColor: [220, 220, 220], textColor: [0, 0, 0], fontStyle: 'bold' },
       styles: { fontSize: 9, font: 'helvetica', cellPadding: 4 },
-      margin: { left: margin, right: margin }
+      margin: { left: margin, right: margin },
     });
 
     yPos = (doc as any).lastAutoTable.finalY + 10;
@@ -94,11 +110,11 @@ export const generateInvoicePDF = (invoice: Invoice): void => {
     const rightAlign = pageWidth - margin - 50;
     doc.text('Subtotal:', rightAlign, yPos);
     doc.text(`${invoice.currency} ${invoice.subtotal.toFixed(2)}`, pageWidth - margin, yPos, { align: 'right' });
-    
+
     yPos += 7;
     doc.text(`Tax (${invoice.taxRate}%):`, rightAlign, yPos);
     doc.text(`${invoice.currency} ${invoice.taxAmount.toFixed(2)}`, pageWidth - margin, yPos, { align: 'right' });
-    
+
     yPos += 7;
     doc.setFont('helvetica', 'bold');
     doc.text('Total:', rightAlign, yPos);
@@ -113,10 +129,10 @@ export const generateInvoicePDF = (invoice: Invoice): void => {
       doc.setFont('helvetica', 'bold');
       doc.text('Notes:', margin, yPos);
       doc.setFont('helvetica', 'normal');
-      
+
       const splitNotes = doc.splitTextToSize(invoice.notes, pageWidth - (margin * 2));
       doc.text(splitNotes, margin, yPos + 7);
-      
+
       yPos += 7 + (splitNotes.length * 5);
     }
 
@@ -127,7 +143,7 @@ export const generateInvoicePDF = (invoice: Invoice): void => {
       doc.setFont('helvetica', 'bold');
       doc.text('Terms & Conditions:', margin, yPos);
       doc.setFont('helvetica', 'normal');
-      
+
       const splitTerms = doc.splitTextToSize(invoice.terms, pageWidth - (margin * 2));
       doc.text(splitTerms, margin, yPos + 7);
     }

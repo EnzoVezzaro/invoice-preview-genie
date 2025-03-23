@@ -61,8 +61,8 @@ const Index = () => {
     }, 500);
   };
 
-  const loadInvoice = (invoiceToLoad: Invoice) => {
-    setInvoice(invoiceToLoad);
+ const loadInvoice = (invoiceToLoad: Invoice) => {
+    setInvoice({...invoiceToLoad, id: uuidv4()});
     toast({
       title: "Success",
       description: t('button.load'),
@@ -158,9 +158,8 @@ const Index = () => {
       {savedInvoices.length > 0 && (
         <SavedInvoices 
           savedInvoices={savedInvoices} 
-          onLoadInvoice={loadInvoice} 
-          onDeleteInvoice={deleteInvoice} 
-          searchQuery={searchQuery}
+          onLoad={loadInvoice} 
+          onDelete={deleteInvoice}
         />
       )}
 
