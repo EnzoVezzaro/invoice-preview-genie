@@ -64,5 +64,16 @@
   "invoiceItemsTotalAmount": "Monto Total",
   "invoiceNotes": "Notas",
   "invoiceTermsAndConditions": "Términos y Condiciones",
-  "itemDescription": "Descripción del artículo"
+  "itemDescription": "Descripción del artículo",
+  "fieldName": "Nombre del Campo",
+  "livePreviewOfInvoice": "Vista previa en vivo de tu factura",
+  "companyLogo": "Logo de la Empresa",
+  "qty": "Cant",
+  "price": "Precio",
+  "removeItem": "Eliminar artículo",
+  "tax": "Impuesto",
+  "newField": "Nuevo Campo",
+  "noSavedInvoices": "No hay facturas guardadas",
+  "createFirstInvoice": "Crea tu primera factura y guárdala para que aparezca aquí.",
+  "invoicePreview": "Vista Previa"
 }

@@ -109,7 +109,7 @@
 
   /* Glassmorphism utilities */
   .glass {
-    @apply backdrop-blur-md bg-white/80 dark:bg-black/30 border border-white/20 dark:border-white/10;
+    @apply border border-white/20 dark:border-white/10;
   }
   
   .glass-card {

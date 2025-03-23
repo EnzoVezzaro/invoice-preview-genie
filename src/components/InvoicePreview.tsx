@@ -5,7 +5,7 @@ import { Separator } from '@/components/ui/separator';
 import { format } from 'date-fns';
 import useTranslation from '@/hooks/use-translation';
 
-const InvoicePreview: React.FC<InvoicePreviewProps> = ({ invoice }) => {
+const InvoicePreview: React.FC<InvoicePreviewProps> = ({ invoice, className }) => {
   const t = useTranslation();
 
   const formatDate = (dateString: string) => {
@@ -18,7 +18,7 @@ const InvoicePreview: React.FC<InvoicePreviewProps> = ({ invoice }) => {
   };
 
   return (
-    <Card className="glass-card overflow-hidden border border-border/40 shadow-elevation animate-fade-in">
+    <Card className={`${className || 'glass-card'} overflow-hidden border border-border/40 shadow-elevation animate-fade-in`}>
       <CardContent className="p-8">
         <div className="mb-8 flex justify-between items-start">
           {invoice.logo ? (

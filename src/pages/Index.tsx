@@ -277,8 +277,8 @@ const Index = () => {
           </div>
           <div className={`${isMobile ? '' : 'sticky top-8'} h-fit`}>
             <div className="mb-4">
-              <h2 className="text-xl font-medium">Invoice Preview</h2>
-              <p className="text-muted-foreground text-sm">Live preview of your invoice</p>
+              <h2 className="text-xl font-medium">{t('invoicePreview')}</h2>
+              <p className="text-muted-foreground text-sm">{t('livePreviewOfInvoice')}</p>
             </div>
             <InvoicePreview invoice={invoice} />
           </div>

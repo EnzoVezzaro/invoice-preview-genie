@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import InvoiceItem from './InvoiceItem';
-import { Plus, Upload } from 'lucide-react';
+import { Plus, Upload, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { v4 as uuidv4 } from 'uuid';
 import CustomFieldInput from './CustomFieldInput';
@@ -372,9 +372,8 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
                         }));
                       }}
                     />
-                    <Button
-                      variant="destructive"
-                      size="sm"
+                    <button
+                      type="button"
                       onClick={() => {
                         setInvoice((prev) => {
                           const newCustomFields = { ...prev.from.customFields };
@@ -388,9 +387,11 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
                           };
                         });
                       }}
+                      className="text-destructive hover:bg-destructive/10 p-2 rounded-full transition-colors"
+                      aria-label="Remove item"
                     >
-                      {t('remove')}
-                    </Button>
+                      <Trash2 size={16} />
+                    </button>
                   </div>
                 ))}
                 <Button
@@ -428,7 +429,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
                   name="to.name"
                   value={invoice.to.name}
                   onChange={handleInputChange}
-                  placeholder="Client Name"
+                  placeholder={t('clientName')}
                   className="form-input"
                 />
               </div>
@@ -440,32 +441,32 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
                   name="to.street"
                   value={invoice.to.street}
                   onChange={handleInputChange}
-                  placeholder="456 Client Street"
+                  placeholder={t('streetAddress')}
                   className="form-input"
                 />
               </div>
               
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-2">
-                  <Label htmlFor="to.city">City</Label>
+                  <Label htmlFor="to.city">{t('city')}</Label>
                   <Input
                     id="to.city"
                     name="to.city"
                     value={invoice.to.city}
                     onChange={handleInputChange}
-                    placeholder="City"
+                    placeholder={t('city')}
                     className="form-input"
                   />
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="to.state">State</Label>
+                  <Label htmlFor="to.state">{t('state')}</Label>
                   <Input
                     id="to.state"
                     name="to.state"
                     value={invoice.to.state}
                     onChange={handleInputChange}
-                    placeholder="State"
+                    placeholder={t('state')}
                     className="form-input"
                   />
                 </div>
@@ -479,19 +480,19 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
                     name="to.zipCode"
                     value={invoice.to.zipCode}
                     onChange={handleInputChange}
-                    placeholder="Zip Code"
+                    placeholder={t('zipCode')}
                     className="form-input"
                   />
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="to.country">Country</Label>
+                  <Label htmlFor="to.country">{t('country')}</Label>
                   <Input
                     id="to.country"
                     name="to.country"
                     value={invoice.to.country}
                     onChange={handleInputChange}
-                    placeholder="Country"
+                    placeholder={t('country')}
                     className="form-input"
                   />
                 </div>
@@ -552,9 +553,8 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
                         }));
                       }}
                     />
-                    <Button
-                      variant="destructive"
-                      size="sm"
+                    <button
+                      type="button"
                       onClick={() => {
                         setInvoice((prev) => {
                           const newCustomFields = { ...prev.to.customFields };
@@ -568,9 +568,11 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
                           };
                         });
                       }}
+                      className="text-destructive hover:bg-destructive/10 p-2 rounded-full transition-colors"
+                      aria-label="Remove item"
                     >
-                      {t('remove')}
-                    </Button>
+                      <Trash2 size={16} />
+                    </button>
                   </div>
                 ))}
                 <Button
@@ -602,8 +604,8 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
         <CardContent className="p-6">
           <div className="flex justify-between items-center mb-4">
             <div>
-              <h3 className="text-lg font-medium mb-1">Invoice Items</h3>
-              <p className="text-sm text-muted-foreground">Add products or services</p>
+              <h3 className="text-lg font-medium mb-1">{t('invoiceItems')}</h3>
+              <p className="text-sm text-muted-foreground">{t('addProductsOrServices')}</p>
             </div>
             <Button 
               onClick={handleAddItem} 
@@ -692,7 +694,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
       {/* Additional Info */}
       <Card className="glass-card card-animation overflow-hidden">
         <CardContent className="p-6">
-          <h3 className="text-lg font-medium mb-4">Additional Information</h3>
+          <h3 className="text-lg font-medium mb-4">{t('additionalInformation')}</h3>
           
           <div className="space-y-4">
             <div className="space-y-2">

@@ -44,6 +44,7 @@ export interface InvoiceFormProps {
 
 export interface InvoicePreviewProps {
   invoice: Invoice;
+  className?: string;
 }
 
 export interface InvoiceItemProps {
