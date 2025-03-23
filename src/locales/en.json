@@ -62,7 +62,6 @@
   "invoice": "INVOICE",
   "issued": "Issued",
   "due": "Due",
-  "from": "From",
   "to": "To",
   "amount": "Amount",
   "noItemsAddedToInvoice": "No items added to this invoice",
@@ -70,5 +69,6 @@
   "price": "Price",
   "removeItem": "Remove item",
   "tax": "Tax",
-  "newField": "New Field"
+  "newField": "New Field",
+  "itemDescription": "Item description"
 }

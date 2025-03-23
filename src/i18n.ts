@@ -15,7 +15,7 @@ i18next
       caches: ['localStorage', 'cookie'],
     },
     backend: {
-      loadPath: '/locales/{{lng}}.json',
+      loadPath: 'src/locales/{{lng}}.json',
     },
     react: {
       useSuspense: false,

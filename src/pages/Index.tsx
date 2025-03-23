@@ -202,8 +202,9 @@ const Index = () => {
   };
 
   const changeLanguage = () => {
-    i18next.changeLanguage(i18next.language === 'es' ? 'en' : 'es');
-    setLanguage(i18next.language);
+    const newLanguage = i18next.language === 'es' ? 'en' : 'es';
+    setLanguage(newLanguage);
+    i18next.changeLanguage(newLanguage);
   };
 
   const getFlag = () => {
@@ -215,10 +216,7 @@ const Index = () => {
       <header className="glass border-b border-border/40 shadow-subtle py-6 px-6 md:px-8 mb-8">
         <div className="container max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div>
-              <h1 className="text-2xl md:text-3xl font-bold tracking-tight">{t('invoiceGenerator')}</h1>
-              <p className="text-muted-foreground mt-1">{t('createBeautifulInvoices')}</p>
-            </div>
+            <div className="w-12 h-12 bg-blue-500 text-white rounded-md flex items-center justify-center font-bold text-xl">KI</div>
             <div className="flex gap-2 w-full md:w-auto">
               <Button
                 variant="outline"

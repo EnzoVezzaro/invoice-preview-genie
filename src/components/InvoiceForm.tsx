@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { InvoiceFormProps, InvoiceItem as InvoiceItemType } from '@/types/invoice';
 import { Card, CardContent } from '@/components/ui/card';
@@ -13,8 +12,11 @@ import { Plus, Upload } from 'lucide-react';
 import { toast } from 'sonner';
 import { v4 as uuidv4 } from 'uuid';
 import CustomFieldInput from './CustomFieldInput';
+import useTranslation from '@/hooks/use-translation';
 
 const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
+  const t = useTranslation();
+
   const handleAddItem = () => {
     const newItem: InvoiceItemType = {
       id: uuidv4(),
@@ -141,8 +143,8 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
         <CardContent className="p-6">
           <div className="flex justify-between items-start mb-6">
             <div>
-              <h3 className="text-lg font-medium mb-1">Invoice Information</h3>
-              <p className="text-sm text-muted-foreground">Basic details about your invoice</p>
+              <h3 className="text-lg font-medium mb-1">{t('invoiceInformation')}</h3>
+              <p className="text-sm text-muted-foreground">{t('basicDetailsAboutInvoice')}</p>
             </div>
             <div className="relative">
               <Button 
@@ -151,7 +153,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
                 onClick={() => document.getElementById('logo-upload')?.click()}
               >
                 <Upload size={14} className="mr-1" />
-                {invoice.logo ? 'Change Logo' : 'Upload Logo'}
+                {invoice.logo ? t('changeLogo') : t('uploadLogo')}
                 <input
                   id="logo-upload"
                   type="file"
@@ -174,7 +176,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="invoiceNumber">Invoice #</Label>
+              <Label htmlFor="invoiceNumber">{t('invoiceNumber')}</Label>
               <Input
                 id="invoiceNumber"
                 name="invoiceNumber"
@@ -186,7 +188,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="dateIssued">Date Issued</Label>
+              <Label htmlFor="dateIssued">{t('dateIssued')}</Label>
               <Input
                 id="dateIssued"
                 name="dateIssued"
@@ -198,7 +200,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="dateDue">Date Due</Label>
+              <Label htmlFor="dateDue">{t('dateDue')}</Label>
               <Input
                 id="dateDue"
                 name="dateDue"
@@ -210,7 +212,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="currency">Currency</Label>
+              <Label htmlFor="currency">{t('currency')}</Label>
               <Select 
                 value={invoice.currency} 
                 onValueChange={(value) => setInvoice(prev => ({ ...prev, currency: value }))}
@@ -237,10 +239,10 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
         {/* From Section */}
         <Card className="glass-card card-animation overflow-hidden">
           <CardContent className="p-6">
-            <h3 className="text-lg font-medium mb-4">From</h3>
+            <h3 className="text-lg font-medium mb-4">{t('from')}</h3>
             <div className="space-y-3">
               <div className="space-y-2">
-                <Label htmlFor="from.name">Business Name</Label>
+                <Label htmlFor="from.name">{t('businessName')}</Label>
                 <Input
                   id="from.name"
                   name="from.name"
@@ -252,7 +254,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="from.street">Street Address</Label>
+                <Label htmlFor="from.street">{t('streetAddress')}</Label>
                 <Input
                   id="from.street"
                   name="from.street"
@@ -265,7 +267,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
               
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-2">
-                  <Label htmlFor="from.city">City</Label>
+                  <Label htmlFor="from.city">{t('city')}</Label>
                   <Input
                     id="from.city"
                     name="from.city"
@@ -277,7 +279,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="from.state">State</Label>
+                  <Label htmlFor="from.state">{t('state')}</Label>
                   <Input
                     id="from.state"
                     name="from.state"
@@ -291,7 +293,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
               
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-2">
-                  <Label htmlFor="from.zipCode">Zip Code</Label>
+                  <Label htmlFor="from.zipCode">{t('zipCode')}</Label>
                   <Input
                     id="from.zipCode"
                     name="from.zipCode"
@@ -303,7 +305,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="from.country">Country</Label>
+                  <Label htmlFor="from.country">{t('country')}</Label>
                   <Input
                     id="from.country"
                     name="from.country"
@@ -317,7 +319,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
               
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-2">
-                  <Label htmlFor="from.email">Email</Label>
+                  <Label htmlFor="from.email">{t('email')}</Label>
                   <Input
                     id="from.email"
                     name="from.email"
@@ -330,7 +332,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="from.phone">Phone</Label>
+                  <Label htmlFor="from.phone">{t('phone')}</Label>
                   <Input
                     id="from.phone"
                     name="from.phone"
@@ -344,7 +346,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
 
               {/* Custom Fields Section */}
               <div className="space-y-2">
-                <Label>Custom Fields</Label>
+                <Label>{t('customFields')}</Label>
                 {Object.entries(invoice.from.customFields || {}).map(([key, value]) => (
                   <div key={key} className="flex gap-2">
                     <CustomFieldInput
@@ -387,7 +389,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
                         });
                       }}
                     >
-                      Remove
+                      {t('remove')}
                     </Button>
                   </div>
                 ))}
@@ -407,7 +409,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
                     }));
                   }}
                 >
-                  Add Custom Field
+                  {t('addCustomField')}
                 </Button>
               </div>
             </div>
@@ -417,10 +419,10 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
         {/* To Section */}
         <Card className="glass-card card-animation overflow-hidden">
           <CardContent className="p-6">
-            <h3 className="text-lg font-medium mb-4">To</h3>
+            <h3 className="text-lg font-medium mb-4">{t('to')}</h3>
             <div className="space-y-3">
               <div className="space-y-2">
-                <Label htmlFor="to.name">Client Name</Label>
+                <Label htmlFor="to.name">{t('clientName')}</Label>
                 <Input
                   id="to.name"
                   name="to.name"
@@ -432,7 +434,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="to.street">Street Address</Label>
+                <Label htmlFor="to.street">{t('streetAddress')}</Label>
                 <Input
                   id="to.street"
                   name="to.street"
@@ -471,7 +473,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
               
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-2">
-                  <Label htmlFor="to.zipCode">Zip Code</Label>
+                  <Label htmlFor="to.zipCode">{t('zipCode')}</Label>
                   <Input
                     id="to.zipCode"
                     name="to.zipCode"
@@ -497,7 +499,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
               
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-2">
-                  <Label htmlFor="to.email">Email</Label>
+                  <Label htmlFor="to.email">{t('email')}</Label>
                   <Input
                     id="to.email"
                     name="to.email"
@@ -510,7 +512,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="to.phone">Phone</Label>
+                  <Label htmlFor="to.phone">{t('phone')}</Label>
                   <Input
                     id="to.phone"
                     name="to.phone"
@@ -524,7 +526,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
 
               {/* Custom Fields Section */}
               <div className="space-y-2">
-                <Label>Custom Fields</Label>
+                <Label>{t('customFields')}</Label>
                 {Object.entries(invoice.to.customFields || {}).map(([key, value]) => (
                   <div key={key} className="flex gap-2">
                     <CustomFieldInput
@@ -567,7 +569,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
                         });
                       }}
                     >
-                      Remove
+                      {t('remove')}
                     </Button>
                   </div>
                 ))}
@@ -587,7 +589,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
                     }));
                   }}
                 >
-                  Add Custom Field
+                  {t('addCustomField')}
                 </Button>
               </div>
             </div>
@@ -609,16 +611,16 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
               size="sm"
               className="transition-all duration-300 hover:bg-primary hover:text-primary-foreground"
             >
-              <Plus size={16} className="mr-1" /> Add Item
+              <Plus size={16} className="mr-1" /> {t('addItem')}
             </Button>
           </div>
           
           <div className="space-y-1">
             <div className="grid grid-cols-12 gap-2 mb-2 text-sm font-medium text-muted-foreground">
-              <div className="col-span-5">Description</div>
-              <div className="col-span-2">Quantity</div>
-              <div className="col-span-2">Unit Price</div>
-              <div className="col-span-2 text-right pr-2">Total</div>
+              <div className="col-span-5">{t('description')}</div>
+              <div className="col-span-2">{t('quantity')}</div>
+              <div className="col-span-2">{t('unitPrice')}</div>
+              <div className="col-span-2 text-right pr-2">{t('total')}</div>
               <div className="col-span-1"></div>
             </div>
             
@@ -626,7 +628,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
             
             {invoice.items.length === 0 ? (
               <div className="text-center py-6 text-muted-foreground">
-                <p>No items added. Click "Add Item" to get started.</p>
+                <p>{t('noItemsAdded')}</p>
               </div>
             ) : (
               invoice.items.map(item => (
@@ -643,12 +645,12 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
             <div className="mt-4 flex justify-end">
               <div className="w-64 space-y-2">
                 <div className="flex justify-between text-sm">
-                  <span>Subtotal:</span>
+                  <span>{t('subtotal')}:</span>
                   <span>{invoice.currency} {invoice.subtotal.toFixed(2)}</span>
                 </div>
                 
                 <div className="flex justify-between items-center text-sm">
-                  <span>Tax Rate:</span>
+                  <span>{t('taxRate')}:</span>
                   <div className="w-24">
                     <Select 
                       value={invoice.taxRate.toString()} 
@@ -671,7 +673,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
                 </div>
                 
                 <div className="flex justify-between text-sm">
-                  <span>Tax Amount:</span>
+                  <span>{t('taxAmount')}:</span>
                   <span>{invoice.currency} {invoice.taxAmount.toFixed(2)}</span>
                 </div>
                 
@@ -694,25 +696,25 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
           
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="notes">Notes</Label>
+              <Label htmlFor="notes">{t('notes')}</Label>
               <Textarea
                 id="notes"
                 name="notes"
                 value={invoice.notes}
                 onChange={handleInputChange}
-                placeholder="Add any notes you want to include on the invoice"
+                placeholder={t('addAnyNotes')}
                 className="form-input min-h-24"
               />
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="terms">Terms & Conditions</Label>
+              <Label htmlFor="terms">{t('termsAndConditions')}</Label>
               <Textarea
                 id="terms"
                 name="terms"
                 value={invoice.terms}
                 onChange={handleInputChange}
-                placeholder="Add your payment terms and conditions"
+                placeholder={t('addPaymentTerms')}
                 className="form-input min-h-24"
               />
             </div>
