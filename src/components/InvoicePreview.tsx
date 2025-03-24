@@ -42,7 +42,7 @@ const InvoicePreview: React.FC<InvoicePreviewProps> = ({ invoice, className }) =
             <div className="text-sm text-muted-foreground mb-2">{t('from')}</div>
             <div className="font-medium">{invoice.from.name}</div>
             <div>{invoice.from.street}</div>
-            <div>{invoice.from.city}, {invoice.from.state} {invoice.from.zipCode}</div>
+            <div>{invoice.from.city ? invoice.from.city + ',' : ''} {invoice.from.state} {invoice.from.zipCode}</div>
             <div>{invoice.from.country}</div>
             {invoice.from.phone && <div className="mt-2">Phone: {invoice.from.phone}</div>}
             {invoice.from.email && <div>Email: {invoice.from.email}</div>}
@@ -58,7 +58,7 @@ const InvoicePreview: React.FC<InvoicePreviewProps> = ({ invoice, className }) =
             <div className="text-sm text-muted-foreground mb-2">{t('to')}</div>
             <div className="font-medium">{invoice.to.name}</div>
             <div>{invoice.to.street}</div>
-            <div>{invoice.to.city}, {invoice.to.state} {invoice.to.zipCode}</div>
+            <div>{invoice.to.city ? invoice.to.city + ',' : ''} {invoice.to.state} {invoice.to.zipCode}</div>
             <div>{invoice.to.country}</div>
             {invoice.to.phone && <div className="mt-2">Phone: {invoice.to.phone}</div>}
             {invoice.to.email && <div>Email: {invoice.to.email}</div>}
