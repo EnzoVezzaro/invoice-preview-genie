@@ -102,7 +102,7 @@ const InvoicePreview: React.FC<InvoicePreviewProps> = ({ invoice, className }) =
               </div>
               
               <div className="flex justify-between items-center text-sm">
-                <span>{t('taxRate')}:</span>
+                <span>{t('taxRate')} ({invoice.taxRate}%):</span>
                 <span>{invoice.currency} {invoice.taxAmount.toFixed(2)}</span>
               </div>
               

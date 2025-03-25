@@ -114,6 +114,7 @@ const Index = () => {
     localStorage.setItem('savedInvoices', JSON.stringify(updatedInvoices));
 
     // Update current invoice with the ID if it was new
+    /*
     setInvoice({
       id: uuidv4(),
       invoiceNumber: 'INV-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000),
@@ -140,6 +141,7 @@ const Index = () => {
       currency: '$',
       logo: invoice.logo
     });
+    */
   };
 
   const deleteInvoice = (id: string) => {
