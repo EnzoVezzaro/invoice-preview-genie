@@ -27,6 +27,9 @@ export const generateInvoicePDF = async (invoice: Invoice): Promise<void> => {
     // Ensure fonts are loaded
     await document.fonts.ready;
 
+    // Wait for fonts and date formatting to complete
+    await new Promise(resolve => setTimeout(resolve, 100));
+
     // Convert the HTML to a canvas using html2canvas
     const canvas = await html2canvas(tempElement, {
       scale: 2, // Increase scale for better resolution
