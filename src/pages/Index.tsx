@@ -17,6 +17,13 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
+const formatDate = (date: Date) => {
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
+};
+
 const Index = () => {
   const isMobile = useIsMobile();
   const t = useTranslation();
@@ -26,8 +33,8 @@ const Index = () => {
   const [invoice, setInvoice] = useState<Invoice>({
     id: uuidv4(),
     invoiceNumber: 'INV-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000),
-    dateIssued: new Date().toISOString().split('T')[0],
-    dateDue: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // +30 days
+    dateIssued: formatDate(new Date()),
+    dateDue: formatDate(new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)), // +30 days
     from: {
       name: t('businessName'),
       street: t('streetAddress'),
@@ -174,8 +181,8 @@ const Index = () => {
     const newInvoice = {
       id: uuidv4(),
       invoiceNumber: 'INV-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000),
-      dateIssued: new Date().toISOString().split('T')[0],
-      dateDue: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+      dateIssued: formatDate(new Date()),
+      dateDue: formatDate(new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)),
       from: { ...invoice.from },
       to: {
         name: '',

@@ -11,9 +11,17 @@ const InvoicePreview: React.FC<InvoicePreviewProps> = ({ invoice, className }) =
   const formatDate = (dateString: string) => {
     if (!dateString) return '';
     try {
-      return format(new Date(dateString + 'T12:00:00'), 'MMM dd, yyyy');
-    } catch (error) { 
-      return dateString;
+      // Assuming dateString is in 'dd/MM/yyyy' format
+      const [day, month, year] = dateString.split('/');
+      const date = new Date(`${year}-${month}-${day}`);
+      return format(date, 'dd/MM/yyyy');
+    } catch (error) {
+      // Fallback for old date format
+      try {
+        return format(new Date(dateString + 'T12:00:00'), 'dd MMM, yyyy');
+      } catch (innerError) {
+        return dateString;
+      }
     }
   };
 
